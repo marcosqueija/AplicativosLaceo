@@ -7,5 +7,6 @@ import br.ufrj.coppe.laceo.AppLACEO.model.MaterialBase;
 
 public interface MaterialBaseRepository extends JpaRepository<MaterialBase, Long> {
 
+//	void save(MaterialBase materialbase);
 	
 }

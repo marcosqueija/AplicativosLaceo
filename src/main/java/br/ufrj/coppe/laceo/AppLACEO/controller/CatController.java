@@ -13,9 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.ufrj.coppe.laceo.AppLACEO.dto.input.MaterialBaseInputDto;
 import br.ufrj.coppe.laceo.AppLACEO.dto.output.CabosAmarrasOutputDto;
 import br.ufrj.coppe.laceo.AppLACEO.dto.output.MaterialBaseOutputDto;
 import br.ufrj.coppe.laceo.AppLACEO.model.MaterialBase;
@@ -49,17 +53,19 @@ public class CatController {
 	private MaterialBaseRepository materialBaseRepository;
 	private CabosAmarrasRepository cabosamarrasRepository;
 	
+	// json direto 
 	@GetMapping(value = "api/teste", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MaterialBase listMateriaisBase() {
 		MaterialBase material = new MaterialBase();
-		material.setNome("Qualquer");
+		material.setName("Qualquer");
 		return material;
 	}
 
+//  passando pelo dto para customizar o json    
 	@GetMapping(value = "api/testedto", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MaterialBaseOutputDto listMateriaisBaseDto() {
 		MaterialBase material = new MaterialBase();
-		material.setNome("Qualquer");
+		material.setName("Qualquer");
 		return new MaterialBaseOutputDto(material);
 	}
 
@@ -72,42 +78,15 @@ public class CatController {
 	public List<CabosAmarrasOutputDto> cabosamarrasList(){
 		return listFromCabosAmarras(cabosamarrasRepository.findAll());		
 	}
+	
+	@PostMapping(value = "api/admaterial",consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity <?> createMaterialBase(@RequestBody MaterialBaseInputDto materialBaseInputDto) {
+		MaterialBase material = new MaterialBase();
+		material.setName(materialBaseInputDto.getName());
+		this.materialBaseRepository.save(material);
+		return ResponseEntity.ok(new MaterialBaseOutputDto(material));		
+	}
 
 	
-	/*	@Autowired
-	public CatController(TopicRepository topicRepository) {
-		this.topicRepository = topicRepository;
-	}
-//  passando pelo dto para customizar o json    
-	@GetMapping(value = "/api/topics", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<TopicBriefOutputDto> listTopics(TopicSearchDto topicSearch, Pageable pageRequest) {
-		Specification<Topic> topicSearchSpecification = topicSearch.toSpecification();
-		Page<Topic> topics = this.topicRepository.findAll(topicSearchSpecification, pageRequest);
-		return  TopicBriefOutputDto.listFromTopics(topics);
-	}
 
-	// json direto 
-  	@GetMapping(value = "/api/topicsold", produces = MediaType.APPLICATION_JSON_VALUE) 
-	public List<TopicBriefOutputDto> topicList() {
-		return listFromTopics(topicRepository.findAll());
-	}
-
-  	//  opcao de acessar o servico de procura por categoria - retorna uma lista com paginacao  	
-    @GetMapping(value="/api/search")
-    @ApiPageable
-    public Page<TopicBriefOutputDto> listarPorStatusCategoria(TopicSearchDto topicSearchDto, @ApiIgnore Pageable pageable) {
-        Page<Topic> topicos = topicRepository.findAll(topicSearchDto.toSpecification(), pageable);
-        return listFromTopics(topicos);
-    }
-/*
-	
-	@GetMapping(value = "api/teste_dto", produces = MediaType.APPLICATION_JSON_VALUE)
-	public TopicBriefOutputDto listTopicsdto() {
-		Category subcategory = new Category("Java", new Category("Programação"));
-		Course course = new Course("Java e JSF", subcategory);
-		Topic topic = new Topic("Problemas com o JSF", "Erro ao fazer conversão da data x",
-				new User("Fulano", "fulano@gmail.com", "123456"), course);
-		return new TopicBriefOutputDto(topic);
-	}
-*/
 }

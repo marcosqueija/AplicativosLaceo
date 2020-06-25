@@ -22,7 +22,7 @@ public class MaterialBase {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
+	private String name;
 	private String descricao;
 	private String Tipo;
 	private double pesoespecifico;
@@ -40,6 +40,10 @@ public class MaterialBase {
 	public void setMassaespecifica(double massaespecifica) {
 		this.massaespecifica = massaespecifica;
 		this.pesoespecifico = (Math.round(1000*massaespecifica*9.81)/1000);
+	}
+
+	public MaterialBase(String name) {
+		this.name = name;
 	}
 
 }

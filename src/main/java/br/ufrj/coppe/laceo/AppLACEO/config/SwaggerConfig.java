@@ -28,7 +28,7 @@ public class SwaggerConfig {
                 "marcosqueija@gmail.com");
 
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("Alura Forum API Documentation")
+                .title("Aplicativos LACEO API Documentation")
                 .description("Está é a documentação iterativa da Rest API do Aplicativos Laceo")
                 .version("1.0")
                 .contact(contato)
