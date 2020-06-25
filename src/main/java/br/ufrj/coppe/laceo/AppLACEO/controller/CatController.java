@@ -16,6 +16,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.ufrj.coppe.laceo.AppLACEO.dto.output.CabosAmarrasOutputDto;
+import br.ufrj.coppe.laceo.AppLACEO.dto.output.MaterialBaseOutputDto;
+import br.ufrj.coppe.laceo.AppLACEO.model.MaterialBase;
+import br.ufrj.coppe.laceo.AppLACEO.repository.CabosAmarrasRepository;
+import br.ufrj.coppe.laceo.AppLACEO.repository.MaterialBaseRepository;
+
+import java.util.ArrayList;
 /*
 import br.com.alura.forum.annotation.ApiPageable;
 import br.com.alura.forum.dto.input.TopicSearchDto;
@@ -30,15 +37,44 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.Arrays;
 import java.util.List;
 
-//import static br.com.alura.forum.dto.output.TopicBriefOutputDto.listFromTopics;
+import static br.ufrj.coppe.laceo.AppLACEO.dto.output.MaterialBaseOutputDto.listFromMateriais;
+import static br.ufrj.coppe.laceo.AppLACEO.dto.output.CabosAmarrasOutputDto.listFromCabosAmarras;
 
 
+@AllArgsConstructor
 @RestController
 public class CatController {
 
-/*	@Autowired
-	private TopicRepository topicRepository;
 
+	private MaterialBaseRepository materialBaseRepository;
+	private CabosAmarrasRepository cabosamarrasRepository;
+	
+	@GetMapping(value = "api/teste", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MaterialBase listMateriaisBase() {
+		MaterialBase material = new MaterialBase();
+		material.setNome("Qualquer");
+		return material;
+	}
+
+	@GetMapping(value = "api/testedto", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MaterialBaseOutputDto listMateriaisBaseDto() {
+		MaterialBase material = new MaterialBase();
+		material.setNome("Qualquer");
+		return new MaterialBaseOutputDto(material);
+	}
+
+	@GetMapping(value = "api/listamateriais", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<MaterialBaseOutputDto> materialBaseList(){
+		return listFromMateriais( materialBaseRepository.findAll());		
+	}
+
+	@GetMapping(value = "api/listacabosamarras", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<CabosAmarrasOutputDto> cabosamarrasList(){
+		return listFromCabosAmarras(cabosamarrasRepository.findAll());		
+	}
+
+	
+	/*	@Autowired
 	public CatController(TopicRepository topicRepository) {
 		this.topicRepository = topicRepository;
 	}
@@ -64,14 +100,6 @@ public class CatController {
         return listFromTopics(topicos);
     }
 /*
-	@GetMapping(value = "api/teste", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Topic listTopics() {
-		Category subcategory = new Category("Java", new Category("Programação"));
-		Course course = new Course("Java e JSF", subcategory);
-		Topic topic = new Topic("Problemas com o JSF", "Erro ao fazer conversão da data",
-				new User("Fulano", "fulano@gmail.com", "123456"), course);
-		return topic;
-	}
 	
 	@GetMapping(value = "api/teste_dto", produces = MediaType.APPLICATION_JSON_VALUE)
 	public TopicBriefOutputDto listTopicsdto() {
